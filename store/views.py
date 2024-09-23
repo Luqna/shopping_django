@@ -165,5 +165,36 @@ def add_to_cart(request):
 
 
 def show_cart(request):
-    return render(request, 'show_cart.html')
+    totalitem = 0
+    if request.session.has_key('username'):
+        username = request.session['username']
+        totalitem = len(Cart.objects.filter(username=username))
+        customer = Customer.objects.filter(username=username)
+        for c in customer:
+            username=c.username
+            cart = Cart.objects.filter(username=username)
+            data = {
+                'username': username,
+                'totalitem': totalitem,
+                'cart': cart
+            }
+            if cart:
+                return render(request, 'show_cart.html',data)
+            else:
+                pass
+
+def plus_cart(request):
+    totalitem = 0
+    quantity = 0
+    if request.session.has_key('username'):
+        username = request.session['username']
+        product_id = request.GET['prod_id']
+        cart = Cart.objects.get(Q(product=product_id) & Q(username=username))
+        cart.quantity+=1
+        cart.save()
+
+        data ={
+             'quantity':quantity,
+        }
+        return JsonResponse({'quantity': quantity, 'totalitem': totalitem})
 

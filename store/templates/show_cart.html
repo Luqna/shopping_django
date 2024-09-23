@@ -16,17 +16,19 @@
         </tr>
       </thead>
       <tbody>
+        {% for cart in cart %}
         <tr>
-          <td>1</td>
-          <td>1</td>
-          <td>1</td>
-          <td>Rp. 1</td>
-          <td><input type="button" class="minus-cart btn" value="-" /></td>
-          <td><span id="quantity">3</span></td>
-          <td><input type="button" class="plus-cart btn" value="+" /></td>
+          <td>{{forloop.counter}}</td>
+          <td>{{cart.product.name}}</td>
+          <td>{{cart.quantity}}</td>
+          <td>Rp. {{cart.product.price}}</td>
+          <td><input type="button" pid="{{cart.product.id}}" class="minus-cart btn btn-primary" value="-" /></td>
+          <td><span id="quantity">{{cart.quantity}}</span></td>
+          <td><input type="button" pid="{{cart.product.id}}" class="plus-cart btn btn-primary" value="+" /></td>
           <td><input type="button" class="btn btn-danger btn-sm remove-cart" value="Delete" /></td>
         </tr>
       </tbody>
+      {% endfor %}
     </table>
     <hr />
     <div class="m-3 p-3">
@@ -35,4 +37,23 @@
   </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+  var jq = jQuery.noConflict();
+  jq(document).on("click", ".plus-cart", function () {
+    var product_id = jq(this).attr("pid");
+    jq.ajax({
+      type: "GET",
+      url: "{% url 'plus_cart' %}",
+      data: {
+        prod_id: product_id,
+      },
+      success: function (response) {
+        console.log(response); // Periksa data yang diterima
+        jq("#quantity-" + product_id).text(response.quantity);
+        jq("#total-items").text(response.total_items);
+      },
+    });
+  });
+</script>
 {% endblock%}
