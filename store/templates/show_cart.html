@@ -25,7 +25,7 @@
           <td><input type="button" pid="{{cart.product.id}}" class="minus-cart btn btn-primary" value="-" /></td>
           <td><span id="quantity">{{cart.quantity}}</span></td>
           <td><input type="button" pid="{{cart.product.id}}" class="plus-cart btn btn-primary" value="+" /></td>
-          <td><input type="button" class="btn btn-danger btn-sm remove-cart" value="Delete" /></td>
+          <td><input type="button" pid="{{cart.product.id}}" class="btn btn-danger btn-sm remove-cart" value="Delete" /></td>
         </tr>
       </tbody>
       {% endfor %}
@@ -52,6 +52,49 @@
         console.log(response); // Periksa data yang diterima
         jq("#quantity-" + product_id).text(response.quantity);
         jq("#total-items").text(response.total_items);
+      },
+    });
+  });
+  var jq = jQuery.noConflict();
+  jq(document).on("click", ".minus-cart", function () {
+    var product_id = jq(this).attr("pid");
+    jq.ajax({
+      type: "GET",
+      url: "{% url 'minus_cart' %}",
+      data: {
+        prod_id: product_id,
+      },
+      success: function (response) {
+        console.log(response); // Periksa data yang diterima
+        jq("#quantity-" - product_id).text(response.quantity);
+        jq("#total-items").text(response.total_items);
+      },
+    });
+  });
+  var jq = jQuery.noConflict();
+  jq(document).on("click", ".remove-cart", function () {
+    var product_id = jq(this).attr("pid");
+
+    jq.ajax({
+      type: "GET",
+      url: "{% url 'remove_cart' %}", // Pastikan URL ini benar sesuai dengan Django URL pattern
+      data: {
+        prod_id: product_id,
+      },
+      success: function (response) {
+        console.log(response); // Lihat response dari server
+
+        // Jika item berhasil dihapus, perbarui UI
+        if (response.message) {
+          // Hapus item dari tampilan
+          jq("#cart-item-" + product_id).remove();
+
+          // Perbarui total item di keranjang
+          jq("#total-items").text(response.total_items);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error:", error);
       },
     });
   });

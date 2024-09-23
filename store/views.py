@@ -181,20 +181,37 @@ def show_cart(request):
             if cart:
                 return render(request, 'show_cart.html',data)
             else:
-                pass
+                return render(request, 'empty_cart.html',data)
+                
 
 def plus_cart(request):
-    totalitem = 0
-    quantity = 0
     if request.session.has_key('username'):
         username = request.session['username']
         product_id = request.GET['prod_id']
         cart = Cart.objects.get(Q(product=product_id) & Q(username=username))
         cart.quantity+=1
         cart.save()
-
         data ={
-             'quantity':quantity,
+             'quantity':cart.quantity,
         }
-        return JsonResponse({'quantity': quantity, 'totalitem': totalitem})
+        return JsonResponse(data)
 
+def minus_cart(request):
+    if request.session.has_key('username'):
+        username = request.session['username']
+        product_id = request.GET['prod_id']
+        cart = Cart.objects.get(Q(product=product_id) & Q(username=username))
+        cart.quantity-=1
+        cart.save()
+        data ={
+             'quantity':cart.quantity,
+        }
+        return JsonResponse(data)
+
+def remove_cart(request):
+    if request.session.has_key('username'):
+        username = request.session['username']
+        product_id = request.GET['prod_id']
+        cart = Cart.objects.get(Q(product=product_id) & Q(username=username))
+        cart.delete()
+        return JsonResponse()
