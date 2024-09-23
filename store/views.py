@@ -126,7 +126,6 @@ def productdetail(request, pk):
     if request.session.has_key('username'):
         username = request.session['username']
         totalitem = len(Cart.objects.filter(username=username))
-        # Memeriksa apakah produk sudah ada di cart
         item_already_in_cart = Cart.objects.filter(Q(product=product) & Q(username=username)).exists()
 
         customer = Customer.objects.filter(username=username)
@@ -243,6 +242,38 @@ def checkout(request):
             return render(request, 'empty_cart.html',data)
     else:
         return redirect('login')
-        
-        
-    
+
+
+def order(request):
+    totalitem=0
+    if request.session.has_key('username'):
+        username = request.session['username']
+        totalitem = len(Cart.objects.filter(username=username))
+        order = OrderDetail.objects.filter(user=username)
+        customer = Customer.objects.filter(username=username)
+        for c in customer:
+            username=c.username
+        data ={
+        'order':order,
+        'username':username,            
+        'totalitem':totalitem
+         }
+        if order:
+            return render(request, 'order.html',data)
+        else:                 
+            return render(request, 'emptyorder.html',data)        
+    else:
+        return redirect('login')
+
+
+# def search(request):
+#     totalitem=0
+#     if request.session.has_key('username'):
+#         username = request.session['username']
+#         query = request.GET.get('query')
+#         print(query)
+#         totalitem = len(Cart.objects.filter(username=username))
+#         customer = Customer.objects.filter(username=username)
+#         for c in customer:
+#             username = c.username 
+#             return render(request, 'search.html') 
