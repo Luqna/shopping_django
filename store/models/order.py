@@ -9,7 +9,7 @@ STATUS_CHOICE = (
     ('Cancel', 'Cancel'),
 )
 class OrderDetail(models.Model):
-    user = models.IntegerField(default=True)
+    user = models.CharField(max_length=255)
     product_name = models.CharField(max_length=255)
     qty = models.PositiveIntegerField(default=1)
     price = models.IntegerField()

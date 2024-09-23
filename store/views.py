@@ -5,6 +5,7 @@ from django.views import View
 from .models.product import Product
 from .models.category import Category
 from .models.customer import Customer
+from .models.order import OrderDetail
 from .models.cart import Cart
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
@@ -215,3 +216,33 @@ def remove_cart(request):
         cart = Cart.objects.get(Q(product=product_id) & Q(username=username))
         cart.delete()
         return JsonResponse()
+
+
+def checkout(request):
+    totalitem=0
+    if request.session.has_key('username'):
+        username = request.session['username']
+        name = request.POST.get('name')
+        address = request.POST.get('address')
+        mobile = request.POST.get('mobile')
+        cart_product = Cart.objects.filter(username=username)
+        for c in cart_product:
+            qty = c.quantity
+            price = c.price
+            product_name = c.product
+            OrderDetail(user=username, product_name=product_name, qty=qty, price=price).save()
+            cart_product.delete()
+            totalitem = len(Cart.objects.filter(username=username))
+            customer = Customer.objects.filter(username=username)
+            for c in customer:
+                username=c.username
+            data={
+                'name':name,
+                'totalitem':totalitem
+            }
+            return render(request, 'empty_cart.html',data)
+    else:
+        return redirect('login')
+        
+        
+    
