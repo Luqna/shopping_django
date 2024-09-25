@@ -191,8 +191,10 @@ def plus_cart(request):
         cart = Cart.objects.get(Q(product=product_id) & Q(username=username))
         cart.quantity+=1
         cart.save()
+        total_price = cart.quantity * cart.price
         data ={
              'quantity':cart.quantity,
+             'total_price':total_price
         }
         return JsonResponse(data)
 
@@ -203,8 +205,10 @@ def minus_cart(request):
         cart = Cart.objects.get(Q(product=product_id) & Q(username=username))
         cart.quantity-=1
         cart.save()
+        total_price = cart.quantity * cart.price
         data ={
              'quantity':cart.quantity,
+             'total_price':total_price
         }
         return JsonResponse(data)
 
@@ -266,14 +270,25 @@ def order(request):
         return redirect('login')
 
 
-# def search(request):
-#     totalitem=0
-#     if request.session.has_key('username'):
-#         username = request.session['username']
-#         query = request.GET.get('query')
-#         print(query)
-#         totalitem = len(Cart.objects.filter(username=username))
-#         customer = Customer.objects.filter(username=username)
-#         for c in customer:
-#             username = c.username 
-#             return render(request, 'search.html') 
+def search(request):
+    totalitem=0
+    if request.session.has_key('username'):
+        username = request.session['username']
+        query = request.GET.get('query')
+        # print(query)
+        search = Product.objects.filter(name__contains=query)
+        category = Category.get_all_categories()
+        totalitem = len(Cart.objects.filter(username=username))
+        customer = Customer.objects.filter(username=username)
+        for c in customer:
+            username = c.username
+        data ={
+            'username':username,
+            'totalitem':totalitem,
+            'search':search,
+            'category':category,
+            'query':query
+        }
+        return render(request, 'search.html', data) 
+    else:
+        return redirect('login')

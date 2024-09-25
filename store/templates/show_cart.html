@@ -100,7 +100,8 @@
           <th>Id</th>
           <th>Product Name</th>
           <th>Quantity</th>
-          <th>Price</th>
+          <th>Each Price</th>
+          <th>Total Price</th>
           <th></th>
           <th>Action</th>
         </tr>
@@ -112,9 +113,9 @@
           <td>{{cart.product.name}}</td>
           <td id="quantity-{{cart.product.id}}">{{cart.quantity}}</td>
           <td>Rp. {{ cart.product.price|intcomma }}</td>
+          <td>Rp. <span id="total-price-{{cart.product.id}}"> {{ cart.product.price|intcomma|floatformat:0 }} </span></td>
           <td>
             <input type="button" pid="{{cart.product.id}}" class="minus-cart btn btn-primary" value="-" />
-            <!-- <span class="mx-2">{{cart.quantity}}</span> -->
             <input type="button" pid="{{cart.product.id}}" class="plus-cart btn btn-primary" value="+" />
           </td>
           <td>
@@ -243,6 +244,7 @@
       success: function (response) {
         console.log(response); // Periksa data yang diterima
         jq("#quantity-" + product_id).text(response.quantity);
+        jq("#total-price-" + product_id).text(response.total_price);
         jq("#total-items").text(response.total_items);
       },
     });
@@ -259,6 +261,7 @@
       success: function (response) {
         console.log(response); // Periksa data yang diterima
         jq("#quantity-" + product_id).text(response.quantity);
+        jq("#total-price-" + product_id).text(response.total_price);
         jq("#total-items").text(response.total_items);
       },
     });

@@ -108,7 +108,7 @@
           </li>
           {% if request.session %}
           <li class="nav-item">
-            <a class="nav-link" href="/order">Orders</a>
+            <a class="nav-link" href="/order/">Orders</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Hello, {{username}} </a>
@@ -128,8 +128,8 @@
           </li>
           {% endif %}
         </ul>
-        <form class="form-inline ml-auto">
-          <input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search" />
+        <form class="form-inline ml-auto" action="/search">
+          <input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search" name="query" />
           <button class="btn btn-search" type="submit">Search</button>
         </form>
       </div>

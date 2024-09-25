@@ -15,5 +15,7 @@ urlpatterns =[
     path('minus_cart', views.minus_cart, name='minus_cart'),  # New URL
     path('remove_cart', views.remove_cart, name='remove_cart'),  # New URL
     path('checkout', views.checkout, name='checkout'),  # New URL
-    path('order/', views.order, name='order'),  # New URL
+    path('order/', views.order, name='order'),
+    path('search/', views.search, name='search'), 
+    # path('emptyorder', views.emptyorder, name='emptyorder'),  # New URL
 ]
