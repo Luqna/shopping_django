@@ -1,34 +1,88 @@
 {% extends 'base.html' %} {% load static %} {% block title %} Order {% endblock title %} {% block content %}
 
+<style>
+  body {
+    background-color: #f8f9fa;
+    font-family: "Montserrat", sans-serif;
+    color: #333;
+  }
+  .container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  .display-4 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  hr {
+    border: 1px solid #e0e0e0;
+  }
+  table {
+    width: 100%;
+    margin-top: 20px;
+  }
+  th,
+  td {
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 1rem;
+  }
+  th {
+    background-color: #e3f2fd;
+    color: #0277bd;
+    font-weight: 600;
+  }
+  td {
+    border-bottom: 1px solid #e0e0e0;
+  }
+  tr:hover {
+    background-color: #f1f8e9;
+  }
+  @media (max-width: 768px) {
+    .container {
+      width: 90%;
+      padding: 10px;
+    }
+    th,
+    td {
+      padding: 10px;
+    }
+  }
+</style>
+
 <div class="container">
-  <div class="border rounded p-4 m4">
-    <p class="display-4pl-4 ml-4">Your Order</p>
-    <hr />
-    <table class="table">
-      <thead>
-        <tr>
-          <th>No.</th>
-          <th>Product Name</th>
-          <th>Order Date</th>
-          <th>Price</th>
-          <th>Quantity</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for order in order %}
-        <tr>
-          <td>{{forloop.counter}}</td>
-          <td>{{order.product_name}}</td>
-          <td>{{order.ordered_date}}</td>
-          <td>{{order.price}}</td>
-          <td>{{order.qty}}</td>
-          <td>{{order.status}}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+  <p class="display-4">Your Order</p>
+  <hr />
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Product Name</th>
+        <th>Order Date</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in order %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ order.product_name }}</td>
+        <td>{{ order.ordered_date }}</td>
+        <td>{{ order.price }}</td>
+        <td>{{ order.qty }}</td>
+        <td>{{ order.status }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 
 {% endblock %}
